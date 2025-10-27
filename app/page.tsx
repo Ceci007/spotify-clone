@@ -1,3 +1,4 @@
+import AllSongs from "@/components/AllSongs";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 
@@ -7,6 +8,7 @@ const Home = () => {
       <Navbar />
       <main>
         <Sidebar />
+        <AllSongs />
       </main>
     </div>
   )
