@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { IoMdPause, IoMdPlay, IoMdSkipBackward, IoMdSkipForward, IoMdVolumeHigh } from "react-icons/io"
 import { LuRepeat1 } from "react-icons/lu"
@@ -23,6 +23,27 @@ const MusicPlayer = () => {
     }
 
     setIsPlaying(!isPlaying);
+  }
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if(!audio) return;
+
+    const updateTime = () => {
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration | 0);
+    }
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateTime);
+  }, []);
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time/60);
+    const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+
+    return `${minutes}:${seconds}`;
   }
 
   return (
@@ -52,11 +73,11 @@ const MusicPlayer = () => {
             </button>
           </div>
           <div className="w-full flex justify-center items-center gap-2">
-            <span className="text-secondary-text font-normal text-sm">1:45</span>
+            <span className="text-secondary-text font-normal text-sm">{formatTime(currentTime)}</span>
             <div className="w-full">
               <input type="range" min="0" max="" className="w-full outline-none h-1 bg-zinc-700 rounded-md appearance-none accent-white" />
             </div>
-            <span className="text-secondary-text font-normal text-sm">3:45</span>
+            <span className="text-secondary-text font-normal text-sm">{formatTime(duration)}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
