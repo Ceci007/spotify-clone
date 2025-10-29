@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useRef, useState, ChangeEvent } from "react"
+import { useEffect, useRef, useState, ChangeEvent, useContext } from "react"
 import Image from "next/image"
 import { IoMdPause, IoMdPlay, IoMdSkipBackward, IoMdSkipForward, IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
 import { LuRepeat1 } from "react-icons/lu"
 import { MdOutlineQueueMusic } from "react-icons/md"
+import { PlayerContext } from "@/layouts/FrontendLayout"
 
 const MusicPlayer = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -13,6 +14,14 @@ const MusicPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [previousVolume, setPreviousVolume] = useState(0);
+
+  const context = useContext(PlayerContext);
+
+  if(!context) {
+    throw new Error("PlayerContext must be within a provider");
+  }
+
+  const { isQueueModalOpen, setIsQueueModalOpen } = context;
 
   const togglePlayButton = () => {
     if(!audioRef.current) return;
@@ -133,7 +142,10 @@ const MusicPlayer = () => {
             <button>
               <LuRepeat1 />
             </button>
-            <button className="text-secondary-text text-xl cursor-pointer">
+            <button 
+              className="text-secondary-text text-xl cursor-pointer"
+              onClick={() => setIsQueueModalOpen(!isQueueModalOpen)}
+            >
               <MdOutlineQueueMusic />
             </button>
             { volume === 0 ?
