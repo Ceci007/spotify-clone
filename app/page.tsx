@@ -1,4 +1,5 @@
 import AllSongs from "@/components/AllSongs";
+import MusicPlayer from "@/components/MusicPlayer";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 
@@ -8,6 +9,7 @@ const Home = () => {
       <Navbar />
       <main>
         <Sidebar />
+        <MusicPlayer />
         <AllSongs />
       </main>
     </div>
