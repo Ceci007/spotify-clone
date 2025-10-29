@@ -90,7 +90,7 @@ const MusicPlayer = () => {
 
   return (
     <div className="fixed bottom-0 left-0 w-full bg-black text-white px-4 py-3 shadow-md z-50">
-      <audio src="/audio/bailando-bachata.mp3" controls ref={audioRef}></audio>
+      <audio src="/audio/bailando-bachata.mp3" ref={audioRef}></audio>
       <div className="max-w-8xl w-[95%] mx-auto flex items-center justify-between">
         <div className="flex gap-4 items-center">
           <Image src="/images/cover-2.jpeg" alt="cover 2" width={300} height={300} className="w-13 h-13 object-cover rounded-md" />
