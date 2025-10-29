@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, ChangeEvent } from "react"
 import Image from "next/image"
 import { IoMdPause, IoMdPlay, IoMdSkipBackward, IoMdSkipForward, IoMdVolumeHigh } from "react-icons/io"
 import { LuRepeat1 } from "react-icons/lu"
@@ -46,6 +46,15 @@ const MusicPlayer = () => {
     return `${minutes}:${seconds}`;
   }
 
+  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value);
+
+    if(audioRef.current) {
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  }
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-black text-white px-4 py-3 shadow-md z-50">
       <audio src="/audio/bailando-bachata.mp3" controls ref={audioRef}></audio>
@@ -75,7 +84,14 @@ const MusicPlayer = () => {
           <div className="w-full flex justify-center items-center gap-2">
             <span className="text-secondary-text font-normal text-sm">{formatTime(currentTime)}</span>
             <div className="w-full">
-              <input type="range" min="0" max="" className="w-full outline-none h-1 bg-zinc-700 rounded-md appearance-none accent-white" />
+              <input 
+                onChange={handleSeek}
+                type="range" 
+                min="0" 
+                max={duration}
+                value={currentTime}
+                className="w-full outline-none h-1 bg-zinc-700 rounded-md appearance-none accent-white" 
+              />
             </div>
             <span className="text-secondary-text font-normal text-sm">{formatTime(duration)}</span>
           </div>
