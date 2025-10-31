@@ -3,9 +3,20 @@ import Link from "next/link"
 import { GoSearch } from "react-icons/go"
 import { MdHomeFilled } from "react-icons/md"
 import useUserSession from "@/custom-hooks/useUserSession"
+import logoutUser from "@/lib/auth/logoutUser"
+import { useRouter } from "next/navigation"
 
 const Navbar = () => {
+  const router = useRouter();
   const { session, loading } = useUserSession();
+
+  const handleLogout = async () => {
+    const result = await logoutUser();
+
+    if(!result?.error) {
+      router.push("/");
+    }
+  }
 
   return (
     <nav className="h-15 flex justify-between items-center px-6 fixed top-0 left-0 w-full bg-black z-100">
@@ -34,7 +45,13 @@ const Navbar = () => {
           <div>
             {!loading && (
               <>
-                {session ? <button className="cursor-pointer h-11 bg-white text-gray-950 rounded-full font-bold hover:bg-secondary-text grid px-8 place-items-center">Logout</button> :
+                {session ? 
+                  <button 
+                    className="cursor-pointer h-11 bg-white text-gray-950 rounded-full font-bold hover:bg-secondary-text grid px-8 place-items-center"
+                    onClick={handleLogout}
+                  >
+                      Logout
+                  </button> :
                   <Link href="/login" className="h-11 bg-white text-gray-950 rounded-full font-bold hover:bg-secondary-text grid px-8 place-items-center">
                     Login
                   </Link>
