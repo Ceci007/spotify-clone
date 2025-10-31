@@ -1,7 +1,26 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
+import { supabase } from "@/lib/SupabaseClient";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) {
+        router.push("/");
+      } else {
+        setLoading(false);
+      }
+    });
+  }, [router]);
+
+  if(loading) return null;
+
   return (
     <div className="h-screen flex justify-center items-center w-full bg-hover">
       <div className="bg-background flex flex-col items-center px-6 lg:px-12 py-6 rounded-md max-w-[400px] w-[90%]">
