@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, ChangeEvent, useContext } from "react"
 import Image from "next/image"
 import { IoMdPause, IoMdPlay, IoMdSkipBackward, IoMdSkipForward, IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
-import { LuRepeat1 } from "react-icons/lu"
+import { LuRepeat, LuRepeat1 } from "react-icons/lu"
 import { MdOutlineQueueMusic } from "react-icons/md"
 import { PlayerContext } from "@/layouts/FrontendLayout"
 
@@ -14,6 +14,7 @@ const MusicPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [previousVolume, setPreviousVolume] = useState(0);
+  const [repeatSong, setRepeatSong] = useState(false);
 
   const context = useContext(PlayerContext);
 
@@ -47,6 +48,11 @@ const MusicPlayer = () => {
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateTime);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateTime);
+    }
   }, []);
 
   const formatTime = (time: number) => {
@@ -115,6 +121,27 @@ const MusicPlayer = () => {
     playAudio();
   }, [currentMusic]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if(!audio) return;
+
+    const handledEnded = () => {
+      if(repeatSong) {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        playNext();
+      }
+    }
+
+    audio.addEventListener("ended", handledEnded);
+
+    return () => {
+      audio.removeEventListener("ended", handledEnded);
+    }
+  }, [repeatSong, playNext]);
+
   if(!currentMusic) return null;
 
   return (
@@ -159,9 +186,14 @@ const MusicPlayer = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-            <button>
-              <LuRepeat1 />
-            </button>
+            {repeatSong ? 
+              <button onClick={() => setRepeatSong(false)} className="text-primary">
+                <LuRepeat1 />
+              </button> :
+              <button onClick={() => setRepeatSong(true)}>
+                <LuRepeat />
+              </button>
+            }
             <button 
               className="text-secondary-text text-xl cursor-pointer"
               onClick={() => setIsQueueModalOpen(!isQueueModalOpen)}
