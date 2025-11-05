@@ -24,7 +24,7 @@ const Sidebar = () => {
     <>
       {session ? (
         <div>
-        <aside className={`fixed left-2 top-15 bg-background w-75 rounded-lg h-[90vh] p-2 overflow-y-auto transition-transform duration-500 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <aside className={`fixed z-80 left-2 top-15 bg-background w-75 rounded-lg h-[90vh] p-2 overflow-y-auto transition-transform duration-500 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div className="flex justify-between text-primary-text items-center p-2 mb-4">
             <h2 className="font-bold">Your library</h2>
             <Link href="/upload-song">
@@ -34,7 +34,7 @@ const Sidebar = () => {
           <UserSongs userId={user_id} />
         </aside>
         <button 
-          className="fixed bottom-5 left-5 bg-background w-12 h-12 lg:hidden grid place-items-center text-white rounded-full z-50 cursor-pointer"
+          className="fixed bottom-5 left-5 bg-background w-12 h-12 lg:hidden grid place-items-center text-white rounded-full z-90 cursor-pointer"
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <MdOutlineLibraryMusic />

@@ -59,7 +59,7 @@ export default function DeleteButton({
     <button
       // Call deleteSong directly on click
       onClick={() => deleteSong()} 
-      className="text-secondary-text w-10 h-10 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer hidden group-hover:flex items-center justify-center z-100"
+      className="text-secondary-text w-[30px] h-[30px] absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer hidden group-hover:flex items-center justify-center z-100"
     >
       <FaTrash />
     </button>
