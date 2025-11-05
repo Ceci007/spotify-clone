@@ -1,5 +1,5 @@
 {
-  "name": "next.js-demo",
+  "name": "spotify-clone",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.78.0",
+    "@supabase/supabase-js": "^2.79.0",
     "@tanstack/react-query": "^5.90.6",
     "babel-plugin-react-compiler": "^1.0.0",
-    "next": "16.0.0",
+    "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0"
@@ -23,7 +23,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.0",
+    "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

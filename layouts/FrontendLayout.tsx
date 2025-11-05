@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar"
 import Queue from "@/components/Queue"
 import Sidebar from "@/components/Sidebar"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Song } from "@/types/song"
 
 type PlayerContextType = {
   isQueueModalOpen: boolean;
@@ -17,6 +18,9 @@ export const PlayerContext = createContext<PlayerContextType | undefined>(undefi
 const FrontendLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   const queryclient = new QueryClient();
   const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
+  const [currentMusic, setCurrentMusic] = useState<Song | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [queue, setQueue] = useState<Song[]>([]);
 
   return (
     <QueryClientProvider client={queryclient}>
