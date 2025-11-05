@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, createContext, useState, Dispatch, SetStateAction } from "react"
+import { ReactNode, createContext, useState, Dispatch, SetStateAction, useEffect } from "react"
 import MusicPlayer from "@/components/MusicPlayer"
 import Navbar from "@/components/Navbar"
 import Queue from "@/components/Queue"
@@ -10,7 +10,14 @@ import { Song } from "@/types/song"
 
 type PlayerContextType = {
   isQueueModalOpen: boolean;
-  setIsQueueModalOpen: Dispatch<SetStateAction<boolean>>
+  setIsQueueModalOpen: Dispatch<SetStateAction<boolean>>;
+  currentMusic: Song | null;
+  setCurrentMusic: Dispatch<SetStateAction<Song | null>>;
+  queue: Song[];
+  setQueue: (songs: Song[]) => void;
+  playNext: () => void;
+  playPrev: () => void;
+  setCurrentIndex: Dispatch<SetStateAction<number>>;
 }
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -22,15 +29,33 @@ const FrontendLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [queue, setQueue] = useState<Song[]>([]);
 
+  const playNext = () => {
+    if(currentIndex < queue.length - 1) {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    }
+  }
+
+  const playPrev = () => {
+    if(currentIndex > 0) {
+      setCurrentIndex((prevIndex) => prevIndex - 1);
+    }
+  }
+
+  useEffect(() => {
+    if(queue.length > 0 && currentIndex >= 0 && currentIndex < queue.length) {
+      setCurrentMusic(queue[currentIndex]);
+    }
+  }, [currentIndex, queue]);
+
   return (
     <QueryClientProvider client={queryclient}>
-      <PlayerContext.Provider value={{ isQueueModalOpen, setIsQueueModalOpen }}>
+      <PlayerContext.Provider value={{ isQueueModalOpen, setIsQueueModalOpen, currentMusic, setCurrentMusic, queue, setQueue, playNext, playPrev, setCurrentIndex }}>
         <div className="min-h-screen">
           <Navbar />
           <main>
             <Sidebar />
             <Queue />
-            <MusicPlayer />
+            {currentMusic && <MusicPlayer />}
             {children}
           </main>
         </div>

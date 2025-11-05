@@ -21,7 +21,7 @@ const MusicPlayer = () => {
     throw new Error("PlayerContext must be within a provider");
   }
 
-  const { isQueueModalOpen, setIsQueueModalOpen } = context;
+  const { isQueueModalOpen, setIsQueueModalOpen, currentMusic, playNext, playPrev } = context;
 
   const togglePlayButton = () => {
     if(!audioRef.current) return;
@@ -97,29 +97,49 @@ const MusicPlayer = () => {
     }
   }, [volume]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if(!audio || !currentMusic) return;
+
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch(err) {
+        console.log("Audioplay error: ", err);
+        setIsPlaying(false);
+      }
+    }
+
+    playAudio();
+  }, [currentMusic]);
+
+  if(!currentMusic) return null;
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-black text-white px-4 py-3 shadow-md z-50">
-      <audio src="/audio/bailando-bachata.mp3" ref={audioRef}></audio>
+      <audio src={currentMusic.audio_url || ""} ref={audioRef}></audio>
       <div className="max-w-8xl w-[95%] mx-auto flex items-center justify-between">
         <div className="flex gap-4 items-center">
-          <Image src="/images/cover-2.jpeg" alt="cover 2" width={300} height={300} className="w-13 h-13 object-cover rounded-md" />
+          <Image src={currentMusic.cover_image_url || ""} alt={`${currentMusic.title} ${currentMusic.id}`} width={300} height={300} className="w-13 h-13 object-cover rounded-md" />
           <div className="text-sm">
-            <p className="text-white">Bicycle</p>
-            <p className="text-secondary-text font-normal">Emmanuel</p>
+            <p className="text-white">{currentMusic.title}</p>
+            <p className="text-secondary-text font-normal">{currentMusic.artist}</p>
           </div>
         </div>
         <div className="max-w-[400px] w-full flex items-center flex-col gap-3">
           <div className="flex gap-4">
-            <button className="text-xl text-secondary-text">
+            <button className="text-xl text-secondary-text cursor-pointer" onClick={playPrev}>
               <IoMdSkipBackward />
             </button>
             <button 
-              className="bg-white text-xl text-black w-10 h-10 rounded-full grid place-items-center"
+              className="bg-white text-xl text-black w-10 h-10 rounded-full grid place-items-center cursor-pointer"
               onClick={togglePlayButton}
             >
               {isPlaying ? <IoMdPause /> : <IoMdPlay />}
             </button>
-            <button className="text-xl text-secondary-text">
+            <button className="text-xl text-secondary-text cursor-pointer" onClick={playNext}>
               <IoMdSkipForward />
             </button>
           </div>

@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { PlayerContext } from "@/layouts/FrontendLayout";
 import Image from "next/image"
 import { supabase } from "@/lib/SupabaseClient";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +11,14 @@ type UserSongsProps = {
 };
 
 const UserSongs = ({ userId }: UserSongsProps) => {
+  const context = useContext(PlayerContext);
+
+  if(!context) {
+    throw new Error("PlayerContext must be used within a PlayerProvider");
+  }
+
+  const { setQueue, setCurrentIndex } = context;
+
   const getUserSongs = async () => {
     const { error, data } = await supabase
       .from("songs")
@@ -32,6 +42,11 @@ const UserSongs = ({ userId }: UserSongsProps) => {
     queryFn: getUserSongs,
   });
 
+  const startPlayingSong = (songs: Song[], index: number) => {
+    setCurrentIndex(index);
+    setQueue(songs);
+  }
+
   if(isLoading) {
     return <h2 className="text-center text-white text-2xl">Loading</h2>
   }
@@ -44,7 +59,10 @@ const UserSongs = ({ userId }: UserSongsProps) => {
       <div>        
         {songs?.map((song: Song, index) => {
           return (
-            <div className="flex gap-2 items-center cursor-pointer mb-4 p-2 rounded-lg hover:bg-hover relative group" key={song.id}>
+            <div 
+              className="flex gap-2 items-center cursor-pointer mb-4 p-2 rounded-lg hover:bg-hover relative group" key={song.id}
+              onClick={() => startPlayingSong(songs, index)}
+            >
               <DeleteButton 
                 songId={song.id} 
                 imagePath={song.cover_image_url} 
