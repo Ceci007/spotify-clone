@@ -1,5 +1,7 @@
 "use client"
 
+import { useContext } from "react"
+import { PlayerContext } from "@/layouts/FrontendLayout"
 import Image from "next/image"
 import { IoMdPlay } from "react-icons/io"
 import { supabase } from "@/lib/SupabaseClient"
@@ -7,6 +9,14 @@ import { useQuery } from "@tanstack/react-query"
 import { Song } from "@/types/song"
 
 const AllSongs = () => {
+  const context = useContext(PlayerContext);
+
+  if(!context) {
+    throw new Error("PlayerContext must be used within a PlayerProvider");
+  }
+
+  const { setQueue, setCurrentIndex } = context;
+
   const getAllSongs = async () => {
     const { data, error } = await supabase.from("songs").select("*");
 
@@ -21,6 +31,11 @@ const AllSongs = () => {
     queryFn: getAllSongs,
     queryKey: ["allSongs"]
   });
+
+  const startPlayingSong = (songs: Song[], index: number) => {
+    setCurrentIndex(index);
+    setQueue(songs);
+  }
 
   if(isLoading) {
     return (
@@ -46,7 +61,7 @@ const AllSongs = () => {
       <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {songs?.map((song: Song, index) => {
           return (
-            <div className="relative bg-background p-3 cursor-pointer rounded-md hover:bg-hover group" key={song.id}>
+            <div onClick={() => startPlayingSong(songs, index)} className="relative bg-background p-3 cursor-pointer rounded-md hover:bg-hover group" key={song.id}>
               <button className="bg-primary w-12 h-12 rounded-full grid place-items-center absolute bottom-8 right-5 opacity-0 group-hover:opacity-100 group-hover:bottom-18 transition-all duration-300 ease-in-out cursor-pointer">
                 <IoMdPlay />
               </button>
