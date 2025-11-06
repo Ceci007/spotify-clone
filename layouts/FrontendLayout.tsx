@@ -17,6 +17,7 @@ type PlayerContextType = {
   setQueue: (songs: Song[]) => void;
   playNext: () => void;
   playPrev: () => void;
+  currentIndex: number;
   setCurrentIndex: Dispatch<SetStateAction<number>>;
 }
 
@@ -49,7 +50,7 @@ const FrontendLayout = ({children}: Readonly<{ children: ReactNode }>) => {
 
   return (
     <QueryClientProvider client={queryclient}>
-      <PlayerContext.Provider value={{ isQueueModalOpen, setIsQueueModalOpen, currentMusic, setCurrentMusic, queue, setQueue, playNext, playPrev, setCurrentIndex }}>
+      <PlayerContext.Provider value={{ isQueueModalOpen, setIsQueueModalOpen, currentMusic, setCurrentMusic, queue, setQueue, playNext, playPrev, currentIndex, setCurrentIndex }}>
         <div className="min-h-screen">
           <Navbar />
           <main>
