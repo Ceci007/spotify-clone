@@ -15,7 +15,20 @@ const Sidebar = () => {
   if(loading) {
     return (
       <aside className={`fixed left-2 top-15 bg-background w-75 rounded-lg h-[90vh] p-2 overflow-y-auto transition-transform duration-500 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <h2 className="text-2xl text-white text-center">Loading</h2>
+        <div className="flex justify-between text-primary-text items-center p-2 mb-4">
+          <h2 className="font-bold">Your library</h2>
+          <Link href="/upload-song">
+            <LuPlus size={20} />
+          </Link>
+        </div>
+        {[...Array(10)].map((i, index) => {
+          return (
+            <div key={index} className="flex gap-2 animate-pulse mb-4">
+              <div className="w-10 h-10 rounded-md bg-hover"></div>
+              <div className="h-5 w-[80%] rounded-md bg-hover"></div>
+            </div>
+          )
+        })}
       </aside>
     )
   }

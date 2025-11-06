@@ -145,7 +145,7 @@ const MusicPlayer = () => {
   if(!currentMusic) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-black text-white px-4 py-3 shadow-md z-50">
+    <div className="fixed bottom-0 left-0 w-full bg-black text-white px-4 py-3 shadow-md z-100">
       <audio src={currentMusic.audio_url || ""} ref={audioRef}></audio>
       <div className="max-w-8xl w-[95%] mx-auto flex items-center justify-between">
         <div className="flex gap-4 items-center">

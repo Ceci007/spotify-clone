@@ -41,7 +41,16 @@ const AllSongs = () => {
     return (
       <div className="min-h-[90vh] bg-background my-15 p-4 lg:ml-80 rounded-lg mx-4">
         <h2 className="text-2xl text-white mb-3 font-semibold">New songs</h2>
-        <h2 className="text-center text-white text-2xl">Loading</h2>
+        <div className="animate-pulse grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {[...Array(10)].map((i, index) => {
+            return (
+              <div key={index}>
+                <div className="w-full h-50 rounded-md mb-2 bg-hover"></div>
+                <div className="h-3 w-[80%] bg-hover rounded-md"></div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     )
   }
