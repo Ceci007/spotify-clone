@@ -64,6 +64,10 @@ const UserSongs = ({ userId }: UserSongsProps) => {
     return <h2 className="text-center text-white text-2xl">{error.message}</h2>
   }
 
+  if(songs?.length === 0) {
+    return <h1 className="text-center text-white text-sm">You have no songs in your library</h1>
+  }
+
   return (
       <div>        
         {songs?.map((song: Song, index) => {
